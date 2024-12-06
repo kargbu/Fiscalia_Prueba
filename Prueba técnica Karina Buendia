@@ -1,1 +1,28 @@
+import pandas as pd
+
+# Cargar datos
+datos_carpetas = pd.read_csv('/Users/kgb/Desktop/Fiscaliia_Prueba/an_data_inc.csv')
+
+# Seleccionar la columna y convertir a datetime
+datos_carpetas.iloc[:, 10] = pd.to_datetime(columna_fecha, format='%d/%m/%Y', errors='coerce')
+
+# Verificar si hay valores NaT
+if columna_fecha.isna().sum() > 0:
+    print(f"Advertencia: Hay {columna_fecha.isna().sum()} valores no válidos en la columna de fechas.")
+
+# Actualizar la columna en el DataFrame
+datos_carpetas.iloc[:, 10] = columna_fecha
+
+# Obtener los años únicos, ignorando NaT el método .dropna elimina los NAT
+anios_unicos = columna_fecha.dropna().dt.year.unique()
+
+# Ordenar los años (por defecto, orden ascendente)
+anios_unicos_ordenados = sorted(anios_unicos)
+
+# Iterar sobre los años únicos
+for anio in anios_unicos_ordenados:
+    print(f"Año: {anio}")
+errores_fechas = datos_carpetas.iloc[:, 10][columna_fecha.isna()]
+print("Registros con fechas no válidas:")
+print(errores_fechas)
 
